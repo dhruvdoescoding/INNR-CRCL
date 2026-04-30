@@ -411,17 +411,17 @@ This is NOT an AI call — it's a simple string match. Run it in the chat messag
 | Variable Name | Where to Get It | Example Value |
 | ----- | ----- | ----- |
 | NEXT\_PUBLIC\_FIREBASE\_API\_KEY | Firebase Project Settings → Your apps | AIzaSy... |
-| NEXT\_PUBLIC\_FIREBASE\_AUTH\_DOMAIN | Firebase Project Settings | [innr-crcl.firebaseapp.com](http://innr-crcl.firebaseapp.com) |
-| NEXT\_PUBLIC\_FIREBASE\_PROJECT\_ID | Firebase Project Settings | innr-crcl |
-| NEXT\_PUBLIC\_FIREBASE\_STORAGE\_BUCKET | Firebase Project Settings | [innr-crcl.appspot.com](http://innr-crcl.appspot.com) |
+| NEXT\_PUBLIC\_FIREBASE\_AUTH\_DOMAIN | Firebase Project Settings | your-project.firebaseapp.com |
+| NEXT\_PUBLIC\_FIREBASE\_PROJECT\_ID | Firebase Project Settings | your-project-id |
+| NEXT\_PUBLIC\_FIREBASE\_STORAGE\_BUCKET | Firebase Project Settings | your-project.appspot.com |
 | NEXT\_PUBLIC\_FIREBASE\_MESSAGING\_SENDER\_ID | Firebase Project Settings | 1234567890 |
 | NEXT\_PUBLIC\_FIREBASE\_APP\_ID | Firebase Project Settings | 1:123:web:abc |
-| FIREBASE\_ADMIN\_PROJECT\_ID | Same as PROJECT\_ID | innr-crcl |
-| FIREBASE\_ADMIN\_CLIENT\_EMAIL | Firebase → Service Accounts → Generate key | firebase-adminsdk@... |
+| FIREBASE\_ADMIN\_PROJECT\_ID | Same as PROJECT\_ID | your-project-id |
+| FIREBASE\_ADMIN\_CLIENT\_EMAIL | Firebase → Service Accounts → Generate key | firebase-adminsdk@your-project.iam.gserviceaccount.com |
 | FIREBASE\_ADMIN\_PRIVATE\_KEY | From downloaded service account JSON | "-----BEGIN PRIVATE KEY..." |
 | OPENAI\_API\_KEY | [platform.openai.com](http://platform.openai.com) → API Keys | sk-... |
-| NEXT\_PUBLIC\_APP\_URL | Your Vercel URL | [https://innr-crcl.vercel.app](https://innr-crcl.vercel.app) |
-| ALLOWED\_DOMAINS | Comma-separated college domains | [gla.ac.in](http://gla.ac.in),[iitbhu.ac.in](http://iitbhu.ac.in),[cu.ac.in](http://cu.ac.in) |
+| NEXT\_PUBLIC\_APP\_URL | Your Netlify URL | https://your-site.netlify.app |
+| ALLOWED\_DOMAINS | Comma-separated college domains | gla.ac.in,iitbhu.ac.in,cu.ac.in |
 
 ### **Seed Script (Run Before Demo)**
 
