@@ -1,101 +1,241 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import SplashScreen from "@/components/SplashScreen";
+import FloatingOrbs from "@/components/FloatingOrbs";
+
+const features = [
+  {
+    icon: "🎭",
+    title: "Anonymous First",
+    desc: "Every conversation starts masked. No real names, no pressure.",
+  },
+  {
+    icon: "✨",
+    title: "Identity Reveal",
+    desc: "Reveal yourself only by mutual consent — when you're both ready.",
+  },
+  {
+    icon: "🎓",
+    title: "Campus Only",
+    desc: "Verified by your college email. Your circle, no outsiders.",
+  },
+];
+
+// ── Shared style constants ───────────────────────────────────────────────────
+const GLASS_CARD: React.CSSProperties = {
+  background:     "rgba(255,255,255,0.04)",
+  backdropFilter: "blur(20px)",
+  border:         "1px solid rgba(167,139,250,0.15)",
+  borderRadius:   "20px",
+  boxShadow:      "0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05)",
+};
+
+const GLOW_BTN: React.CSSProperties = {
+  background:   "linear-gradient(135deg, #7C3AED, #6D28D9)",
+  border:       "1px solid rgba(167,139,250,0.3)",
+  boxShadow:    "0 0 20px rgba(124,58,237,0.4)",
+  borderRadius: "9999px",
+  padding:      "1rem 2.5rem",
+  fontSize:     "1.05rem",
+  fontWeight:   600,
+  color:        "#F1F0FF",
+  cursor:       "pointer",
+  transition:   "box-shadow 0.2s ease, transform 0.15s ease",
+};
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [showSplash, setShowSplash] = useState(true);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  return (
+    <>
+      {showSplash && (
+        <SplashScreen onComplete={() => setShowSplash(false)} />
+      )}
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: showSplash ? 0 : 1 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="min-h-screen flex flex-col relative"
+      >
+        <FloatingOrbs />
+
+        {/* ── NAVBAR ── */}
+        <nav
+          className="fixed top-0 inset-x-0 z-40 flex items-center justify-between px-6 py-4"
+          style={{
+            ...GLASS_CARD,
+            borderRadius: 0,
+            borderTop:    "none",
+            borderLeft:   "none",
+            borderRight:  "none",
+            borderBottom: "1px solid rgba(167,139,250,0.12)",
+          }}
+        >
+          <span
+            className="font-black tracking-widest"
+            style={{
+              fontSize:   "1.4rem",
+              background: "linear-gradient(135deg, #A78BFA, #7C3AED)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
           >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            INNR-CRCL
+          </span>
+          <Link
+            href="/signup"
+            className="text-sm font-semibold transition-all duration-200"
+            style={{
+              ...GLOW_BTN,
+              padding:   "0.5rem 1.25rem",
+              fontSize:  "0.875rem",
+              boxShadow: "0 0 16px rgba(124,58,237,0.35)",
+            }}
+            onMouseEnter={(e) =>
+              ((e.currentTarget as HTMLAnchorElement).style.boxShadow =
+                "0 0 30px rgba(124,58,237,0.6)")
+            }
+            onMouseLeave={(e) =>
+              ((e.currentTarget as HTMLAnchorElement).style.boxShadow =
+                "0 0 16px rgba(124,58,237,0.35)")
+            }
           >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+            Join Your CRCL
+          </Link>
+        </nav>
+
+        {/* ── HERO ── */}
+        <section className="flex-1 flex flex-col items-center justify-center text-center px-6 pt-32 pb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1, duration: 0.7, ease: "easeOut" }}
+          >
+            <h1
+              className="font-black leading-tight"
+              style={{ fontSize: "clamp(2.4rem, 6vw, 4rem)" }}
+            >
+              <span
+                style={{
+                  background:           "linear-gradient(135deg, #F1F0FF 30%, #A78BFA 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor:  "transparent",
+                  display:              "block",
+                }}
+              >
+                Your campus. Your circle.
+              </span>
+              <span
+                style={{
+                  background:           "linear-gradient(135deg, #A78BFA, #7C3AED)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor:  "transparent",
+                  display:              "block",
+                  marginTop:            "0.1em",
+                }}
+              >
+                Anonymous, always.
+              </span>
+            </h1>
+
+            <p
+              className="mt-5 max-w-md mx-auto leading-relaxed"
+              style={{ fontSize: "1.1rem", color: "#6B7280" }}
+            >
+              The only place where your campus lives anonymously.
+              Find your people.
+            </p>
+
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link
+                href="/signup"
+                style={GLOW_BTN}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLAnchorElement;
+                  el.style.boxShadow = "0 0 35px rgba(124,58,237,0.6)";
+                  el.style.transform = "translateY(-1px)";
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLAnchorElement;
+                  el.style.boxShadow = "0 0 20px rgba(124,58,237,0.4)";
+                  el.style.transform = "translateY(0)";
+                }}
+              >
+                Step Into Your CRCL →
+              </Link>
+              <a
+                href="#features"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById("features")?.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="text-sm font-semibold transition-all duration-200 cursor-pointer"
+                style={{
+                  background:   "transparent",
+                  border:       "1px solid rgba(167,139,250,0.3)",
+                  color:        "#A78BFA",
+                  borderRadius: "9999px",
+                  padding:      "0.95rem 2rem",
+                }}
+                onMouseEnter={(e) =>
+                  ((e.currentTarget as HTMLAnchorElement).style.background =
+                    "rgba(167,139,250,0.1)")
+                }
+                onMouseLeave={(e) =>
+                  ((e.currentTarget as HTMLAnchorElement).style.background = "transparent")
+                }
+              >
+                Learn more
+              </a>
+            </div>
+          </motion.div>
+        </section>
+
+        {/* ── FEATURE CARDS ── */}
+        <section id="features" className="px-6 pb-20 max-w-5xl mx-auto w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {features.map((f, i) => (
+              <motion.div
+                key={f.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 + i * 0.1, duration: 0.5 }}
+                className="flex flex-col gap-3 p-8 transition-all duration-200"
+                style={GLASS_CARD}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLDivElement).style.borderColor =
+                    "rgba(167,139,250,0.35)";
+                  (e.currentTarget as HTMLDivElement).style.boxShadow =
+                    "0 8px 40px rgba(124,58,237,0.2), inset 0 1px 0 rgba(255,255,255,0.07)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLDivElement).style.borderColor =
+                    "rgba(167,139,250,0.15)";
+                  (e.currentTarget as HTMLDivElement).style.boxShadow =
+                    "0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05)";
+                }}
+              >
+                <span className="text-3xl">{f.icon}</span>
+                <h3 className="font-bold text-base" style={{ color: "#F1F0FF" }}>
+                  {f.title}
+                </h3>
+                <p className="text-sm leading-relaxed" style={{ color: "#6B7280" }}>
+                  {f.desc}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* ── FOOTER ── */}
+        <footer className="pb-8 text-center text-sm" style={{ color: "#4B5563" }}>
+          INNR-CRCL © 2026
+        </footer>
+      </motion.div>
+    </>
   );
 }

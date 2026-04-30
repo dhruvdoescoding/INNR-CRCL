@@ -1,0 +1,38 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{db}/documents {
+
+    // Users: public fields readable by all authenticated users,
+    // but only the owner can write their own document.
+    match /users/{uid} {
+      allow read: if request.auth != null;
+      allow write: if request.auth.uid == uid;
+    }
+
+    // Posts: any authenticated user can read unflagged posts and create/update.
+    // Sensitive write ops (isFlagged, isPostOfDay) are enforced in API routes
+    // via the Admin SDK, which bypasses these rules.
+    match /posts/{postId} {
+      allow read: if request.auth != null && resource.data.isFlagged == false;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null;
+    }
+
+    // Chats: only the two participants can read or write the chat doc.
+    // Messages inherit the same participant check via a Firestore get().
+    match /chats/{chatId} {
+      allow read, write: if request.auth.uid in resource.data.participants;
+      match /messages/{msgId} {
+        allow read, write: if request.auth.uid in
+          get(/databases/$(db)/documents/chats/$(chatId)).data.participants;
+      }
+    }
+
+    // Reports: any authenticated user can submit a report,
+    // but no user can read reports — admin reads via Admin SDK in API routes.
+    match /reports/{reportId} {
+      allow create: if request.auth != null;
+      allow read: if false;
+    }
+  }
+}

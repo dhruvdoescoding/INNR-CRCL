@@ -34,3 +34,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# env (bare, without .local suffix)
+.env
+
+# project-specific: seed script contains sensitive data
+scripts/seed.js
