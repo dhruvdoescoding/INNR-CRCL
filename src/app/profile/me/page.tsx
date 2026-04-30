@@ -191,7 +191,8 @@ export default function ProfilePage() {
       setAuthLoading(false);
     });
     return unsub;
-  }, [router]); // alias intentionally omitted — not needed in dep array for this effect
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router]);
 
   function startEdit() {
     setEditDept(department);

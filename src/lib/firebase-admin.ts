@@ -21,23 +21,42 @@ import {
   type Auth as AdminAuth,
 } from "firebase-admin/auth";
 
-// FIREBASE_ADMIN_PRIVATE_KEY is stored with literal \n characters in
-// .env.local / Vercel environment variables. Replace them so the PEM is
-// correctly formatted at runtime.
-const privateKey = process.env.FIREBASE_ADMIN_PRIVATE_KEY?.replace(/\\n/g, "\n");
+// ── Lazy singleton factory ────────────────────────────────────────────────────
+// Initialisation is deferred to the first request so that next build does NOT
+// crash when Firebase Admin env vars are absent from the build environment.
+// At runtime (Netlify Functions / Node server) the vars are always present.
 
-// Singleton — prevents re-initializing the Admin app across hot-reloads
-const adminApp: AdminApp = getApps().length
-  ? getApps()[0]
-  : initializeApp({
-      credential: cert({
-        projectId: process.env.FIREBASE_ADMIN_PROJECT_ID!,
-        clientEmail: process.env.FIREBASE_ADMIN_CLIENT_EMAIL!,
-        privateKey,
-      }),
-    });
+function getAdminApp(): AdminApp {
+  if (getApps().length > 0) return getApps()[0];
 
-const adminDb: AdminFirestore = getFirestore(adminApp);
-const adminAuth: AdminAuth = getAuth(adminApp);
+  const projectId   = process.env.FIREBASE_ADMIN_PROJECT_ID;
+  const clientEmail = process.env.FIREBASE_ADMIN_CLIENT_EMAIL;
+  const privateKey  = process.env.FIREBASE_ADMIN_PRIVATE_KEY?.replace(/\\n/g, "\n");
 
-export { adminApp, adminDb, adminAuth };
+  if (!projectId || !clientEmail || !privateKey) {
+    throw new Error(
+      "[firebase-admin] Missing env vars: FIREBASE_ADMIN_PROJECT_ID, " +
+      "FIREBASE_ADMIN_CLIENT_EMAIL, or FIREBASE_ADMIN_PRIVATE_KEY. " +
+      "Add them to your Netlify environment variables."
+    );
+  }
+
+  return initializeApp({
+    credential: cert({ projectId, clientEmail, privateKey }),
+  });
+}
+
+// Lazy getters — only called when an API route actually handles a request
+const adminDb: AdminFirestore = new Proxy({} as AdminFirestore, {
+  get(_, prop) {
+    return (getFirestore(getAdminApp()) as unknown as Record<string | symbol, unknown>)[prop];
+  },
+});
+
+const adminAuth: AdminAuth = new Proxy({} as AdminAuth, {
+  get(_, prop) {
+    return (getAuth(getAdminApp()) as unknown as Record<string | symbol, unknown>)[prop];
+  },
+});
+
+export { adminDb, adminAuth, getAdminApp };
